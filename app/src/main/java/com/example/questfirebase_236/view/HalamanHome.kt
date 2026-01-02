@@ -112,7 +112,11 @@ fun ListSiswa(
         contentPadding = PaddingValues(dimensionResource(id = R.dimen.padding_small)),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
     ) {
-        items(items = listSiswa, key = { it.id }) { siswa ->
+        // Gunakan item kunci yang lebih aman: gabungan ID dan posisi/indeks
+        items(
+            items = listSiswa,
+            key = { siswa -> siswa.id.ifEmpty { "empty_${siswa.hashCode()}_${System.currentTimeMillis()}" } }
+        ) { siswa ->
             SiswaCard(
                 siswa = siswa,
                 modifier = Modifier
