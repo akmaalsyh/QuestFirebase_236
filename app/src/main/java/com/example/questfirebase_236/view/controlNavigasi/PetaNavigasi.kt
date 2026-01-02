@@ -8,17 +8,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+// Import semua halaman view
 import com.example.questfirebase_236.view.HalamanDetail
 import com.example.questfirebase_236.view.HalamanEdit
-
+import com.example.questfirebase_236.view.EntrySiswaScreen // Pastikan nama fungsi ini benar
 import com.example.questfirebase_236.view.HalamanHome
+// Import semua rute
 import com.example.questfirebase_236.view.route.DestinasiDetail
 import com.example.questfirebase_236.view.route.DestinasiEdit
 import com.example.questfirebase_236.view.route.DestinasiEntry
 import com.example.questfirebase_236.view.route.DestinasiHome
 
-// Tambahkan fungsi ini karena MainActivity memanggil fungsi ini
-// Pastikan ini ada di PetaNavigasi.kt agar MainActivity bisa memanggilnya
 @Composable
 fun DataSiswaApp(
     navController: NavHostController = rememberNavController(),
@@ -49,9 +49,9 @@ fun HostNavigasi(
             )
         }
 
-        // Halaman Entry
+        // Halaman Entry (Tambah Data)
         composable(DestinasiEntry.route) {
-            HalamanEntry(
+            EntrySiswaScreen( // GANTI HalamanEntry menjadi EntrySiswaScreen
                 navigateBack = {
                     navController.navigateUp()
                 }
@@ -93,9 +93,4 @@ fun HostNavigasi(
             )
         }
     }
-}
-
-@Composable
-fun HalamanEntry(navigateBack: () -> Boolean) {
-    TODO("Not yet implemented")
 }
