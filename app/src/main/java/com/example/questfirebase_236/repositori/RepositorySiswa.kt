@@ -14,12 +14,15 @@ interface RepositorySiswa {
 
 class FirebaseRepositorySiswa : RepositorySiswa {
     private val firestore = FirebaseFirestore.getInstance()
-    private val siswaCollection = firestore.collection("Siswa")
+    private val siswaCollection = firestore.collection("siswa")
 
     override suspend fun getAllSiswa(): List<Siswa> {
         return try {
             val snapshot = siswaCollection.get().await()
-            snapshot.documents.mapNotNull { it.toObject(Siswa::class.java) }
+            snapshot.documents.mapNotNull { document ->
+                // Ambil data sebagai objek, lalu sisipkan ID dokumennya secara manual
+                document.toObject(Siswa::class.java)?.copy(id = document.id)
+            }
         } catch (e: Exception) {
             emptyList()
         }
