@@ -1,5 +1,6 @@
 package com.example.questfirebase_236.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -35,7 +36,12 @@ class EntryViewModel(
     // Menyimpan data ke Firestore melalui repository
     suspend fun addSiswa() {
         if (validateInput()) {
-            repositorySiswa.insertSiswa(uiStateSiswa.detailSiswa.toDataSiswa())
+            try {
+                repositorySiswa.insertSiswa(uiStateSiswa.detailSiswa.toDataSiswa())
+            } catch (e: Exception) {
+                // Ini akan mencegah aplikasi crash fatal
+                Log.e("FirestoreError", "Gagal menyimpan data: ${e.message}")
+            }
         }
     }
 }
