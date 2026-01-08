@@ -6,16 +6,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.questfirebase_236.view.SiswaTopAppBar
+import com.example.questfirebase_236.view.route.DestinasiEdit
 import com.example.questfirebase_236.viewmodel.EditViewModel
 import com.example.questfirebase_236.viewmodel.PenyediaViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HalamanEdit(
+fun EditSiswaScreen(
     navigateBack: () -> Unit,
+    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: EditViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
@@ -23,19 +25,22 @@ fun HalamanEdit(
 
     Scaffold(
         topBar = {
+            // Mengambil SiswaTopAppBar dari folder view
             SiswaTopAppBar(
-                title = "Edit Siswa",
+                title = stringResource(DestinasiEdit.titleRes),
                 canNavigateBack = true,
-                navigateUp = navigateBack
+                navigateUp = onNavigateUp
             )
-        }
+        },
+        modifier = modifier
     ) { innerPadding ->
+        // Menggunakan UI input yang sama dengan Halaman Entry
         EntrySiswaBody(
-            uiStateSiswa = viewModel.editUiState,
+            uiStateSiswa = viewModel.uiStateSiswa,
             onSiswaValueChange = viewModel::updateUiState,
             onSaveClick = {
                 coroutineScope.launch {
-                    viewModel.updateSiswa()
+                    viewModel.editSatuSiswa()
                     navigateBack()
                 }
             },
