@@ -8,12 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-// Import semua halaman view
-import com.example.questfirebase_236.view.HalamanDetail
-import com.example.questfirebase_236.view.HalamanEdit
-import com.example.questfirebase_236.view.EntrySiswaScreen // Pastikan nama fungsi ini benar
-import com.example.questfirebase_236.view.HalamanHome
-// Import semua rute
+import com.example.questfirebase_236.view.DetailSiswaScreen
+import com.example.questfirebase_236.view.EditSiswaScreen
+import com.example.questfirebase_236.view.EntrySiswaScreen
+import com.example.questfirebase_236.view.HomeScreen
 import com.example.questfirebase_236.view.route.DestinasiDetail
 import com.example.questfirebase_236.view.route.DestinasiEdit
 import com.example.questfirebase_236.view.route.DestinasiEntry
@@ -24,7 +22,7 @@ fun DataSiswaApp(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
-    HostNavigasi(navController = navController, modifier = modifier)
+    HostNavigasi(navController = navController)
 }
 
 @Composable
@@ -39,7 +37,7 @@ fun HostNavigasi(
     ) {
         // Halaman Home
         composable(DestinasiHome.route) {
-            HalamanHome(
+            HomeScreen(
                 navigateToItemEntry = {
                     navController.navigate(DestinasiEntry.route)
                 },
@@ -49,46 +47,51 @@ fun HostNavigasi(
             )
         }
 
-        // Halaman Entry (Tambah Data)
+        // Halaman Entry Siswa
         composable(DestinasiEntry.route) {
-            EntrySiswaScreen( // GANTI HalamanEntry menjadi EntrySiswaScreen
+            EntrySiswaScreen(
                 navigateBack = {
-                    navController.navigateUp()
+                    navController.navigate(DestinasiHome.route) {
+                        popUpTo(DestinasiHome.route) { inclusive = true }
+                    }
                 }
             )
         }
 
-        // Halaman Detail
+        // Halaman Detail Siswa
         composable(
             route = DestinasiDetail.routeWithArgs,
-            arguments = listOf(
-                navArgument(DestinasiDetail.itemIdArg) {
-                    type = NavType.StringType
-                }
-            )
+            arguments = listOf(navArgument(DestinasiDetail.itemIdArg) {
+                type = NavType.StringType
+            })
         ) {
-            HalamanDetail(
-                navigateBack = {
-                    navController.navigateUp()
-                },
-                onEditClick = { nim ->
+            DetailSiswaScreen(
+                navigateToEditItem = { nim ->
                     navController.navigate("${DestinasiEdit.route}/$nim")
+                },
+                navigateBack = {
+                    navController.navigate(DestinasiHome.route) {
+                        popUpTo(DestinasiHome.route) { inclusive = true }
+                    }
                 }
             )
         }
 
-        // Halaman Edit
+        // Halaman Edit Siswa
         composable(
             route = DestinasiEdit.routeWithArgs,
-            arguments = listOf(
-                navArgument(DestinasiEdit.itemIdArg) {
-                    type = NavType.StringType
-                }
-            )
+            arguments = listOf(navArgument(DestinasiEdit.itemIdArg) {
+                type = NavType.StringType
+            })
         ) {
-            HalamanEdit(
+            EditSiswaScreen(
                 navigateBack = {
-                    navController.popBackStack()
+                    navController.navigate(DestinasiHome.route) {
+                        popUpTo(DestinasiHome.route) { inclusive = true }
+                    }
+                },
+                onNavigateUp = {
+                    navController.navigateUp()
                 }
             )
         }
